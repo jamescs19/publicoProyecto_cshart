@@ -149,7 +149,7 @@ namespace Proyecto_cshart
             File.WriteAllText("students.json", JsonSerializer.Serialize(students, options));
             File.WriteAllText("teachers.json", JsonSerializer.Serialize(teachers, options));
             File.WriteAllText("subjects.json", JsonSerializer.Serialize(subjects, options));
-
+            
 
         }
 
@@ -178,25 +178,7 @@ namespace Proyecto_cshart
                     File.ReadAllText("subjects.json")
                 ) ?? new List<Subject>();
             }
-
-            foreach (var subject in subjects)
-            {
-                subject.Students.Clear();
-
-                if (subject.StudentIds != null)
-                {
-                    foreach (var id in subject.StudentIds)
-                    {
-                        var student = students.FirstOrDefault(s => s.Id == id);
-
-                        if (student != null)
-                        {
-                            subject.Students.Add(student);
-                        }
-                    }
-                }
-            }
+        }
         }
     }
-}
 
