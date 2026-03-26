@@ -24,6 +24,9 @@ namespace Proyecto_cshart.Models
                     throw new ArgumentException("Error: El id no puede tener menos de 4 caracteres" +
                     " ni mas de 15 caracteres");
                 }
+                if (!value.All(char.IsDigit))
+                    throw new ArgumentException("El ID solo puede contener números");
+
                 else
                 {
                     id = value;

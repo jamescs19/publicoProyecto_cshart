@@ -16,34 +16,52 @@ namespace Proyecto_cshart
         public IReadOnlyList<Subject> Subjects => subjects;
         public IReadOnlyList<Grade> Grades => grades;
 
-        public void AddStudent(Student student)
-        {
-            if (student == null)
-            {
-                throw new ArgumentException("Error: Esta opcion esta vacia");
-            }
-
-            if (students.Contains(student))
-            {
-                throw new ArgumentException("Error: Este estudiante ya esta registrado");
-            }
-
-            students.Add(student);
-        }
-
         public void AddTeacher(Teacher teacher)
         {
             if (teacher == null)
-            {
-                throw new ArgumentException("Error: Esta opcion esta vacia");
-            }
+                throw new ArgumentException("Error: profesor vacío");
 
-            if (teachers.Contains(teacher))
+            if (string.IsNullOrWhiteSpace(teacher.Id) || string.IsNullOrWhiteSpace(teacher.Email))
+                throw new ArgumentException("Error: datos incompletos");
+
+            // validar id repetido
+            if (teachers.Any(t => t.Id == teacher.Id))
+                throw new ArgumentException("Ya existe un profesor con ese ID");
+
+            // Validar email repetido
+            string email = teacher.Email.ToLower();
+
+            if (teachers.Any(t => t.Email.ToLower() == email) ||
+                students.Any(s => s.Email.ToLower() == email))
             {
-                throw new ArgumentException("Error: Este profesor ya esta registrado");
+                throw new ArgumentException("El correo ya está en uso");
             }
 
             teachers.Add(teacher);
+        }
+
+        public void AddStudent(Student student)
+        {
+            if (student == null)
+                throw new ArgumentException("Error: estudiante vacío");
+
+            if (string.IsNullOrWhiteSpace(student.Id) || string.IsNullOrWhiteSpace(student.Email))
+                throw new ArgumentException("Error: datos incompletos");
+
+            //  Validar id repetdo
+            if (students.Any(s => s.Id == student.Id))
+                throw new ArgumentException("Ya existe un estudiante con ese ID");
+
+            // Validar email
+            string email = student.Email.ToLower();
+
+            if (students.Any(s => s.Email.ToLower() == email) ||
+                teachers.Any(t => t.Email.ToLower() == email))
+            {
+                throw new ArgumentException("El correo ya está en uso");
+            }
+
+            students.Add(student);
         }
 
         public void AddSubject(Subject subject)
@@ -64,13 +82,13 @@ namespace Proyecto_cshart
         public void AddGrade(Grade grade)
         {
             if (grade == null)
-                throw new ArgumentException("Invalid grade");
+                throw new ArgumentException("Nota invalida");
 
             if (grades.Any(g =>
                 g.Student.Id == grade.Student.Id &&
                 g.Subject.Code == grade.Subject.Code))
             {
-                throw new ArgumentException("This student already has a grade for this subject");
+                throw new ArgumentException("Este estudiante ya tiene notas en esta materia");
             }
 
             grades.Add(grade);
